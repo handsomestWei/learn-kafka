@@ -68,15 +68,12 @@ public class CustomProducer {
 
             @Override
             public Boolean doInOperations(KafkaOperations<String, Object> operations) {
-                SendResult<String, Object> result;
                 try {
-                    result = kafkaTpl.send(pro.getTopic(), pro.getPartitionKey(), msg).get();
+                    kafkaTpl.send(pro.getTopic(), pro.getPartitionKey(), msg).get();
+                    kafkaTpl.send(pro.getTopic(), pro.getPartitionKey(), msg).get();
                     // 发生异常，消息回滚
                     @SuppressWarnings("unused")
                     int i = 1 / 0;
-                    if (result.getRecordMetadata() != null) {
-                        return true;
-                    }
                 } catch (Exception e) {
                     throw new RuntimeException("executeInTransaction");
                 }
